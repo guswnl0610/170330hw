@@ -11,8 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by guswn_000 on 2017-03-30.
@@ -23,6 +27,8 @@ public class Fragment1 extends Fragment implements View.OnClickListener
     Button apple,grape,kiwi,jamong , revise, first, initialize;
     Table t1,t2,t3,t4;
     TextView tvtable, tvtime, tvpasta,tvpizza, tvmembership,tvprice;
+    int npiz,npas,nmem;
+    RadioButton checkedrb;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -52,130 +58,212 @@ public class Fragment1 extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View v)
+    public void onClick(final View v)
     {
         switch (v.getId())
         {
             case R.id.applebtn:
+                cleantv();
                 tvtable.setText("사과테이블");
                 if(t1 == null) //데이터가 없으면
                 {thisisempty();}
                 else
-                {showtable();}
+                {showtable2(t1);}
                 break;
             case R.id.grapebtn:
+                cleantv();
                 tvtable.setText("포도테이블");
                 if(t2 == null)
                 {thisisempty();}
                 else
-                {showtable();}
+                {showtable2(t2);}
                 break;
             case R.id.kiwibtn:
+                cleantv();
                 tvtable.setText("키위테이블");
                 if(t3 == null)
                 {thisisempty();}
                 else
-                {showtable();}
+                {showtable2(t3);}
                 break;
             case R.id.jamongbtn:
+                cleantv();
                 tvtable.setText("자몽테이블");
                 if(t4 == null)
                 {thisisempty();}
                 else
-                {showtable();}
+                {showtable2(t4);}
                 break;
             case R.id.button5://새 주문
-                final View view = View.inflate(getActivity(),R.layout.dlglayout,null);
-                EditText pastanum = (EditText)view.findViewById(R.id.pastanum);
-                EditText pizzanum = (EditText)view.findViewById(R.id.pizzanum);
-                EditText whatmembership = (EditText)view.findViewById(R.id.memberet);
-                AlertDialog.Builder dlg = new AlertDialog.Builder(getActivity());
-                dlg.setTitle("새 주문")
+                View dlgview = View.inflate(v.getContext(),R.layout.dlglayout,null);
+                final EditText pastanum = (EditText)dlgview.findViewById(R.id.pastanum);
+                final EditText pizzanum = (EditText)dlgview.findViewById(R.id.pizzanum);
+                final RadioButton rb1 = (RadioButton)dlgview.findViewById(R.id.radioButton);
+                final RadioButton rb2 = (RadioButton)dlgview.findViewById(R.id.radioButton2);
+                AlertDialog.Builder dlg = new AlertDialog.Builder(v.getContext());
+                dlg.setView(dlgview)
+                        .setTitle("새 주문")
+                        .setNegativeButton("닫기",null)
                         .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
-                                Snackbar.make(view,"정보가 입력되었습니다.",1000).setAction("확인",null);
+                                npas = Integer.parseInt(pastanum.getText().toString());
+                                npiz = Integer.parseInt(pizzanum.getText().toString());
+                                if(tvtable.getText().toString().equals("사과테이블"))
+                                {
+                                    if(rb1.isChecked())
+                                    {
+                                        t1 = new Table ("사과테이블",npas,npiz,"기본 멤버쉽",finddate());
+                                    }
+                                    else if (rb2.isChecked())
+                                    {
+                                        t1 = new Table ("사과테이블",npas,npiz,"VIP 멤버쉽",finddate());
+                                    }
+                                    apple.setText("사과 TABLE");
+                                    showtable2(t1);
+                                }
+                                else if(tvtable.getText().toString().equals("포도테이블"))
+                                {
+                                    if(rb1.isChecked())
+                                    {
+                                        t2 = new Table ("포도테이블",npas,npiz,"기본 멤버쉽",finddate());
+                                    }
+                                    else if (rb2.isChecked())
+                                    {
+                                        t2 = new Table ("포도테이블",npas,npiz,"VIP 멤버쉽",finddate());
+                                    }
+                                    grape.setText("포도 TABLE");
+                                    showtable2(t2);
+                                }
+                                else if(tvtable.getText().toString().equals("키위테이블"))
+                                {
+                                    if(rb1.isChecked())
+                                    {
+                                        t3 = new Table ("키위테이블",npas,npiz,"기본 멤버쉽",finddate());
+                                    }
+                                    else if (rb2.isChecked())
+                                    {
+                                        t3 = new Table ("키위테이블",npas,npiz,"VIP 멤버쉽",finddate());
+                                    }
+                                    kiwi.setText("키위 TABLE");
+                                    showtable2(t3);
+                                }
+                                else if(tvtable.getText().toString().equals("자몽테이블"))
+                                {
+                                    if(rb1.isChecked())
+                                    {
+                                        t4 = new Table ("자몽테이블",npas,npiz,"기본 멤버쉽",finddate());
+                                    }
+                                    else if (rb2.isChecked())
+                                    {
+                                        t4 = new Table ("자몽테이블",npas,npiz,"VIP 멤버쉽",finddate());
+                                    }
+                                    jamong.setText("자몽 TABLE");
+                                    showtable2(t4);
+                                }
+                                Snackbar.make(v,"정보가 입력되었습니다",2000).show();
                             }
                         })
-                        .setNegativeButton("닫기",null)
                         .show();
-                if(tvtable.getText().equals("사과테이블"))
-                {
-                    t1 = new Table("사과테이블", Integer.parseInt(pastanum.getText().toString()), Integer.parseInt(pizzanum.getText().toString()), Integer.parseInt(whatmembership.getText().toString()));
-                    apple.setText("사과 TABLE");
-                }
-                else if(tvtable.getText().equals("포도테이블"))
-                {
-                    t2 = new Table("포도테이블", Integer.parseInt(pastanum.getText().toString()), Integer.parseInt(pizzanum.getText().toString()), Integer.parseInt(whatmembership.getText().toString()));
-                    grape.setText("포도 TABLE");
-                }
-                else if(tvtable.getText().equals("키위테이블"))
-                {
-                    t3 = new Table("키위테이블", Integer.parseInt(pastanum.getText().toString()), Integer.parseInt(pizzanum.getText().toString()), Integer.parseInt(whatmembership.getText().toString()));
-                    kiwi.setText("키위 TABLE");
-                }
-                else if(tvtable.getText().equals("자몽테이블"))
-                {
-                    t4 = new Table("자몽테이블", Integer.parseInt(pastanum.getText().toString()), Integer.parseInt(pizzanum.getText().toString()), Integer.parseInt(whatmembership.getText().toString()));
-                    jamong.setText("자몽 TABLE");
-                }
-                showtable();
                 break;
             case R.id.button6://수정
-                final View view2 = View.inflate(getActivity(),R.layout.dlglayout,null);
-                EditText pastanum2 = (EditText)view2.findViewById(R.id.pastanum);
-                EditText pizzanum2 = (EditText)view2.findViewById(R.id.pizzanum);
-                EditText whatmembership2 = (EditText)view2.findViewById(R.id.memberet);
-                AlertDialog.Builder dlg2 = new AlertDialog.Builder(getActivity());
-                dlg2.setTitle("주문 수정")
+                View dlgview2 = View.inflate(v.getContext(),R.layout.dlglayout,null);
+                final EditText pastanum2 = (EditText)dlgview2.findViewById(R.id.pastanum);
+                final EditText pizzanum2 = (EditText)dlgview2.findViewById(R.id.pizzanum);
+                final RadioButton rb3 = (RadioButton)dlgview2.findViewById(R.id.radioButton);
+                final RadioButton rb4 = (RadioButton)dlgview2.findViewById(R.id.radioButton2);
+                AlertDialog.Builder dlg2 = new AlertDialog.Builder(v.getContext());
+                dlg2.setView(dlgview2)
+                        .setTitle("주문 수정")
+                        .setNegativeButton("닫기",null)
                         .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
-                                Snackbar.make(view2,"정보가 입력되었습니다.",1000).setAction("확인",null);
+                                npas = Integer.parseInt(pastanum2.getText().toString());
+                                npiz = Integer.parseInt(pizzanum2.getText().toString());
+                                if(tvtable.getText().toString().equals("사과테이블"))
+                                {
+                                    if(rb3.isChecked())
+                                    {
+                                        t1 = new Table ("사과테이블",npas,npiz,"기본 멤버쉽",finddate());
+                                    }
+                                    else if (rb4.isChecked())
+                                    {
+                                        t1 = new Table ("사과테이블",npas,npiz,"VIP 멤버쉽",finddate());
+                                    }
+                                    apple.setText("사과 TABLE");
+                                    showtable2(t1);
+                                }
+                                else if(tvtable.getText().toString().equals("포도테이블"))
+                                {
+                                    if(rb3.isChecked())
+                                    {
+                                        t2 = new Table ("포도테이블",npas,npiz,"기본 멤버쉽",finddate());
+                                    }
+                                    else if (rb4.isChecked())
+                                    {
+                                        t2 = new Table ("포도테이블",npas,npiz,"VIP 멤버쉽",finddate());
+                                    }
+                                    grape.setText("포도 TABLE");
+                                    showtable2(t2);
+                                }
+                                else if(tvtable.getText().toString().equals("키위테이블"))
+                                {
+                                    if(rb3.isChecked())
+                                    {
+                                        t3 = new Table ("키위테이블",npas,npiz,"기본 멤버쉽",finddate());
+                                    }
+                                    else if (rb4.isChecked())
+                                    {
+                                        t3 = new Table ("키위테이블",npas,npiz,"VIP 멤버쉽",finddate());
+                                    }
+                                    kiwi.setText("키위 TABLE");
+                                    showtable2(t3);
+                                }
+                                else if(tvtable.getText().toString().equals("자몽테이블"))
+                                {
+                                    if(rb3.isChecked())
+                                    {
+                                        t4 = new Table ("자몽테이블",npas,npiz,"기본 멤버쉽",finddate());
+                                    }
+                                    else if (rb4.isChecked())
+                                    {
+                                        t4 = new Table ("자몽테이블",npas,npiz,"VIP 멤버쉽",finddate());
+                                    }
+                                    jamong.setText("자몽 TABLE");
+                                    showtable2(t4);
+                                }
+                                Snackbar.make(v,"정보가 입력되었습니다",2000).show();
                             }
                         })
-                        .setNegativeButton("닫기",null)
                         .show();
-                if(tvtable.getText().equals("사과테이블"))
-                {
-                    t1 = new Table("사과테이블", Integer.parseInt(pastanum2.getText().toString()), Integer.parseInt(pizzanum2.getText().toString()), Integer.parseInt(whatmembership2.getText().toString()));
-                }
-                else if(tvtable.getText().equals("포도테이블"))
-                {
-                    t2 = new Table("포도테이블", Integer.parseInt(pastanum2.getText().toString()), Integer.parseInt(pizzanum2.getText().toString()), Integer.parseInt(whatmembership2.getText().toString()));
-                }
-                else if(tvtable.getText().equals("키위테이블"))
-                {
-                    t3 = new Table("키위테이블", Integer.parseInt(pastanum2.getText().toString()), Integer.parseInt(pizzanum2.getText().toString()), Integer.parseInt(whatmembership2.getText().toString()));
-                }
-                else if(tvtable.getText().equals("자몽테이블"))
-                {
-                    t4 = new Table("자몽테이블", Integer.parseInt(pastanum2.getText().toString()), Integer.parseInt(pizzanum2.getText().toString()), Integer.parseInt(whatmembership2.getText().toString()));
-                }
-                showtable();
                 break;
             case R.id.button7://초기화
-                if(tvtable.getText().equals("사과테이블"))
+                if(tvtable.getText().toString().equals("사과테이블"))
                 {
                     t1 = null;
                     apple.setText("사과 TABLE (비어있음)");
+                    cleaner();
                 }
-                else if(tvtable.getText().equals("포도테이블"))
+                else if(tvtable.getText().toString().equals("포도테이블"))
                 {
                     t2 = null;
-                    apple.setText("포도 TABLE (비어있음)");
+                    grape.setText("포도 TABLE (비어있음)");
+                    cleaner();
                 }
-                else if(tvtable.getText().equals("키위테이블"))
+                else if(tvtable.getText().toString().equals("키위테이블"))
                 {
                     t3 = null;
-                    apple.setText("키위 TABLE (비어있음)");
+                    kiwi.setText("키위 TABLE (비어있음)");
+                    cleaner();
                 }
-                else if(tvtable.getText().equals("자몽테이블"))
+                else if(tvtable.getText().toString().equals("자몽테이블"))
                 {
                     t4 = null;
-                    apple.setText("자몽 TABLE (비어있음)");
+                    jamong.setText("자몽 TABLE (비어있음)");
+                    cleaner();
                 }
                 break;
         }
@@ -188,124 +276,54 @@ public class Fragment1 extends Fragment implements View.OnClickListener
         revise.setEnabled(false);
         initialize.setEnabled(false);
     }
-    public void showtable() // 비어있지 않은경우 Table의 정보 출력
+    public void showtable2(Table t)
     {
         first.setEnabled(false);
         revise.setEnabled(true);
         initialize.setEnabled(true);
-        int totalprice;
-        if(tvtable.getText().equals("사과테이블"))
+        int price = t.getPasta()*10000 + t.getPizza()*12000;
+        tvpasta.setText(t.getPasta()+"");
+        tvpizza.setText(t.getPizza()+"");
+        tvtime.setText(t.getDate()+"");
+        tvmembership.setText(t.getMembership());
+        if(t.getMembership().equals("기본 멤버쉽"))
         {
-            tvpasta.setText( t1.pasta );
-            tvpizza.setText( t1.pizza );
-            tvtime.setText("년월일 시간 입력하긔"); // 지금말고..좀 있다가 하긔
-            totalprice = t1.pasta * 10000 + t1.pizza * 12000;
-            if(t1.membership == 0)
-            {
-                tvmembership.setText("기본 멤버쉽");
-                tvprice.setText(totalprice*(0.9) + "원");
-            }
-            else if (t1.membership == 1)
-            {
-                tvmembership.setText("VIP 멤버쉽");
-                tvprice.setText(totalprice*(0.7) + "원");
-            }
-            else
-            {
-                tvmembership.setText("멤버쉽 없음");
-                tvprice.setText(totalprice + "원");
-            }
+            tvprice.setText(price * 0.9 + "원");
         }
-        else if(tvtable.getText().equals("포도테이블"))
+        else
         {
-            tvpasta.setText( t2.pasta );
-            tvpizza.setText( t2.pizza );
-            tvtime.setText("년월일 시간 입력하긔"); // 지금말고..좀 있다가 하긔
-            totalprice = t2.pasta * 10000 + t2.pizza * 12000;
-            if(t2.membership == 0)
-            {
-                tvmembership.setText("기본 멤버쉽");
-                tvprice.setText(totalprice*(0.9) + "원");
-            }
-            else if (t2.membership == 1)
-            {
-                tvmembership.setText("VIP 멤버쉽");
-                tvprice.setText(totalprice*(0.7) + "원");
-            }
-            else
-            {
-                tvmembership.setText("멤버쉽 없음");
-                tvprice.setText(totalprice + "원");
-            }
-        }
-        else if(tvtable.getText().equals("키위테이블"))
-        {
-            tvpasta.setText( t3.pasta );
-            tvpizza.setText( t3.pizza );
-            tvtime.setText("년월일 시간 입력하긔"); // 지금말고..좀 있다가 하긔
-            totalprice = t3.pasta * 10000 + t3.pizza * 12000;
-            if(t3.membership == 0)
-            {
-                tvmembership.setText("기본 멤버쉽");
-                tvprice.setText(totalprice*(0.9) + "원");
-            }
-            else if (t3.membership == 1)
-            {
-                tvmembership.setText("VIP 멤버쉽");
-                tvprice.setText(totalprice*(0.7) + "원");
-            }
-            else
-            {
-                tvmembership.setText("멤버쉽 없음");
-                tvprice.setText(totalprice + "원");
-            }
-        }
-        else if(tvtable.getText().equals("자몽테이블"))
-        {
-            tvpasta.setText( t4.pasta );
-            tvpizza.setText( t4.pizza );
-            tvtime.setText("년월일 시간 입력하긔"); // 지금말고..좀 있다가 하긔
-            totalprice = t4.pasta * 10000 + t4.pizza * 12000;
-            if(t4.membership == 0)
-            {
-                tvmembership.setText("기본 멤버쉽");
-                tvprice.setText(totalprice*(0.9) + "원");
-            }
-            else if (t4.membership == 1)
-            {
-                tvmembership.setText("VIP 멤버쉽");
-                tvprice.setText(totalprice*(0.7) + "원");
-            }
-            else
-            {
-                tvmembership.setText("멤버쉽 없음");
-                tvprice.setText(totalprice + "원");
-            }
+            tvprice.setText(price * 0.7 + "원");
         }
     }
 
+    public void cleantv()
+    {
+        tvprice.setText(null);
+        tvpasta.setText(null);
+        tvtime.setText(null);
+        tvpizza.setText(null);
+        tvmembership.setText(null);
+    }
 
-//    public void newtable()
-//    {
-//        final View view = View.inflate(getActivity(),R.layout.dlglayout,null);
-//        final EditText pastanum = (EditText)view.findViewById(R.id.pastanum);
-//        final EditText pizzanum = (EditText)view.findViewById(R.id.pizzanum);
-//        final EditText whatmembership = (EditText)view.findViewById(R.id.memberet);
-//        AlertDialog.Builder dlg = new AlertDialog.Builder(getActivity());
-//        dlg.setTitle("새 주문")
-//                .setView(view)
-//                .setPositiveButton("확인", new DialogInterface.OnClickListener()
-//                {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which)
-//                    {
-//                        //
-//                        Snackbar.make(view,"정보가 입력되었습니다",1000).setAction("확인",null);
-//                    }
-//                })
-//                .setNegativeButton("닫기",null)
-//                .show();
-//    }이거어케해 ㅡㅡ
+    public void cleaner()
+    {
+        tvtable.setText(null);
+        tvtime.setText(null);
+        tvmembership.setText(null);
+        tvprice.setText(null);
+        tvpasta.setText(null);
+        tvpizza.setText(null);
+        initialize.setEnabled(false);
+        first.setEnabled(false);
+        revise.setEnabled(false);
+    }
+    public String finddate()
+    {
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        String fmdate = sdf.format(date);
+        return fmdate;
+    }
 
 }
-

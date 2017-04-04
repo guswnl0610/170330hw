@@ -9,17 +9,31 @@ import java.util.Date;
 
 public class Table
 {
-    String table[], name;
-    int pasta, pizza , membership;
-    long time,date;
+    String name, membership, date;
+    int pasta, pizza;
 
-    public Table(String t, int pas, int piz, int member)
+    public Table(String t, int pas, int piz, String member, String d)
     {
         name = t;
         pasta = pas;
         pizza = piz;
         membership = member;
-        time = new Date().getTime();
-        date = new Date().getDate();
+        date = d;
+    }
+
+    public String getMembership() {
+        return membership;
+    }
+
+    public int getPasta() {
+        return pasta;
+    }
+
+    public int getPizza() {
+        return pizza;
+    }
+
+    public String getDate() {
+        return date;
     }
 }
