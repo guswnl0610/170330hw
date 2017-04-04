@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ffc59f"
+        android:background="#ffd9c0"
         android:orientation="vertical">
 
         <LinearLayout
@@ -23,6 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#ffffff"
+                android:textColor="#da7049"
                 android:text="사과 Table (비어있음)" />
 
             <Button
@@ -31,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#ffffff"
+                android:textColor="#784aa9"
                 android:text="포도 Table (비어있음)" />
 
             <Button
@@ -39,6 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#ffffff"
+                android:textColor="#60af58"
                 android:text="키위 Table (비어있음)" />
 
             <Button
@@ -47,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#ffffff"
+                android:textColor="#e69191"
                 android:text="자몽 Table (비어있음)" />
 
         </LinearLayout>
@@ -197,6 +201,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
+
         android:orientation="horizontal">
 
         <Button
