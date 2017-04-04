@@ -27,7 +27,7 @@ public class Fragment1 extends Fragment implements View.OnClickListener
     Button apple,grape,kiwi,jamong , revise, first, initialize;
     Table t1,t2,t3,t4;
     TextView tvtable, tvtime, tvpasta,tvpizza, tvmembership,tvprice;
-    int npiz,npas,nmem;
+    int npiz,npas;
     RadioButton checkedrb;
     @Nullable
     @Override
@@ -56,14 +56,13 @@ public class Fragment1 extends Fragment implements View.OnClickListener
         initialize.setOnClickListener(this);
         return fragview;
     }
-
     @Override
     public void onClick(final View v)
     {
         switch (v.getId())
         {
             case R.id.applebtn:
-                cleantv();
+                cleaner();
                 tvtable.setText("사과테이블");
                 if(t1 == null) //데이터가 없으면
                 {thisisempty();}
@@ -71,7 +70,7 @@ public class Fragment1 extends Fragment implements View.OnClickListener
                 {showtable2(t1);}
                 break;
             case R.id.grapebtn:
-                cleantv();
+                cleaner();
                 tvtable.setText("포도테이블");
                 if(t2 == null)
                 {thisisempty();}
@@ -79,7 +78,7 @@ public class Fragment1 extends Fragment implements View.OnClickListener
                 {showtable2(t2);}
                 break;
             case R.id.kiwibtn:
-                cleantv();
+                cleaner();
                 tvtable.setText("키위테이블");
                 if(t3 == null)
                 {thisisempty();}
@@ -87,7 +86,7 @@ public class Fragment1 extends Fragment implements View.OnClickListener
                 {showtable2(t3);}
                 break;
             case R.id.jamongbtn:
-                cleantv();
+                cleaner();
                 tvtable.setText("자몽테이블");
                 if(t4 == null)
                 {thisisempty();}
@@ -108,8 +107,29 @@ public class Fragment1 extends Fragment implements View.OnClickListener
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
-                                npas = Integer.parseInt(pastanum.getText().toString());
-                                npiz = Integer.parseInt(pizzanum.getText().toString());
+                                if (pastanum.getText().toString().equals("") || pizzanum.getText().toString().equals(""))
+                                {
+                                    if(pastanum.getText().toString().equals("") && (!pizzanum.getText().toString().equals("")))
+                                    {
+                                        npas = 0;
+                                        npiz = Integer.parseInt(pizzanum.getText().toString());
+                                    }
+                                    else if ( !pastanum.getText().toString().equals("") && pizzanum.getText().toString().equals(""))
+                                    {
+                                        npas = Integer.parseInt(pastanum.getText().toString());
+                                        npiz = 0;
+                                    }
+                                    else if (pastanum.getText().toString().equals("") && pizzanum.getText().toString().equals(""))
+                                    {
+                                        npas = 0;
+                                        npiz = 0;
+                                    }
+                                }
+                                else
+                                {
+                                    npas = Integer.parseInt(pastanum.getText().toString());
+                                    npiz = Integer.parseInt(pizzanum.getText().toString());
+                                }
                                 if(tvtable.getText().toString().equals("사과테이블"))
                                 {
                                     if(rb1.isChecked())
@@ -180,9 +200,29 @@ public class Fragment1 extends Fragment implements View.OnClickListener
                         .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
+                            {if (pastanum2.getText().toString().equals("") || pizzanum2.getText().toString().equals(""))
                             {
-                                npas = Integer.parseInt(pastanum2.getText().toString());
-                                npiz = Integer.parseInt(pizzanum2.getText().toString());
+                                if(pastanum2.getText().toString().equals("") && (!pizzanum2.getText().toString().equals("")))
+                                {
+                                    npas = 0;
+                                    npiz = Integer.parseInt(pizzanum2.getText().toString());
+                                }
+                                else if ( !pastanum2.getText().toString().equals("") && pizzanum2.getText().toString().equals(""))
+                                {
+                                    npas = Integer.parseInt(pastanum2.getText().toString());
+                                    npiz = 0;
+                                }
+                                else if (pastanum2.getText().toString().equals("") && pizzanum2.getText().toString().equals(""))
+                                {
+                                    npas = 0;
+                                    npiz = 0;
+                                }
+                            }
+                                else
+                                {
+                                    npas = Integer.parseInt(pastanum2.getText().toString());
+                                    npiz = Integer.parseInt(pizzanum2.getText().toString());
+                                }
                                 if(tvtable.getText().toString().equals("사과테이블"))
                                 {
                                     if(rb3.isChecked())
@@ -295,16 +335,6 @@ public class Fragment1 extends Fragment implements View.OnClickListener
             tvprice.setText(price * 0.7 + "원");
         }
     }
-
-    public void cleantv()
-    {
-        tvprice.setText(null);
-        tvpasta.setText(null);
-        tvtime.setText(null);
-        tvpizza.setText(null);
-        tvmembership.setText(null);
-    }
-
     public void cleaner()
     {
         tvtable.setText(null);
@@ -325,5 +355,4 @@ public class Fragment1 extends Fragment implements View.OnClickListener
         String fmdate = sdf.format(date);
         return fmdate;
     }
-
 }
