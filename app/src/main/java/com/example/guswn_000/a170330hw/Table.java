@@ -36,4 +36,16 @@ public class Table
     public String getDate() {
         return date;
     }
+
+    public void setMembership(String membership) {
+        this.membership = membership;
+    }
+
+    public void setPasta(int pasta) {
+        this.pasta = pasta;
+    }
+
+    public void setPizza(int pizza) {
+        this.pizza = pizza;
+    }
 }

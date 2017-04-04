@@ -28,7 +28,6 @@ public class Fragment1 extends Fragment implements View.OnClickListener
     Table t1,t2,t3,t4;
     TextView tvtable, tvtime, tvpasta,tvpizza, tvmembership,tvprice;
     int npiz,npas;
-    RadioButton checkedrb;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -59,6 +58,11 @@ public class Fragment1 extends Fragment implements View.OnClickListener
     @Override
     public void onClick(final View v)
     {
+        View dlgview = View.inflate(v.getContext(),R.layout.dlglayout,null);
+        final EditText pastanum = (EditText)dlgview.findViewById(R.id.pastanum);
+        final EditText pizzanum = (EditText)dlgview.findViewById(R.id.pizzanum);
+        final RadioButton rb1 = (RadioButton)dlgview.findViewById(R.id.radioButton);
+        final RadioButton rb2 = (RadioButton)dlgview.findViewById(R.id.radioButton2);
         switch (v.getId())
         {
             case R.id.applebtn:
@@ -94,11 +98,6 @@ public class Fragment1 extends Fragment implements View.OnClickListener
                 {showtable2(t4);}
                 break;
             case R.id.button5://새 주문
-                View dlgview = View.inflate(v.getContext(),R.layout.dlglayout,null);
-                final EditText pastanum = (EditText)dlgview.findViewById(R.id.pastanum);
-                final EditText pizzanum = (EditText)dlgview.findViewById(R.id.pizzanum);
-                final RadioButton rb1 = (RadioButton)dlgview.findViewById(R.id.radioButton);
-                final RadioButton rb2 = (RadioButton)dlgview.findViewById(R.id.radioButton2);
                 AlertDialog.Builder dlg = new AlertDialog.Builder(v.getContext());
                 dlg.setView(dlgview)
                         .setTitle("새 주문")
@@ -188,31 +187,26 @@ public class Fragment1 extends Fragment implements View.OnClickListener
                         .show();
                 break;
             case R.id.button6://수정
-                View dlgview2 = View.inflate(v.getContext(),R.layout.dlglayout,null);
-                final EditText pastanum2 = (EditText)dlgview2.findViewById(R.id.pastanum);
-                final EditText pizzanum2 = (EditText)dlgview2.findViewById(R.id.pizzanum);
-                final RadioButton rb3 = (RadioButton)dlgview2.findViewById(R.id.radioButton);
-                final RadioButton rb4 = (RadioButton)dlgview2.findViewById(R.id.radioButton2);
                 AlertDialog.Builder dlg2 = new AlertDialog.Builder(v.getContext());
-                dlg2.setView(dlgview2)
+                dlg2.setView(dlgview)
                         .setTitle("주문 수정")
                         .setNegativeButton("닫기",null)
                         .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
-                            {if (pastanum2.getText().toString().equals("") || pizzanum2.getText().toString().equals(""))
+                            {if (pastanum.getText().toString().equals("") || pizzanum.getText().toString().equals(""))
                             {
-                                if(pastanum2.getText().toString().equals("") && (!pizzanum2.getText().toString().equals("")))
+                                if(pastanum.getText().toString().equals("") && (!pizzanum.getText().toString().equals("")))
                                 {
                                     npas = 0;
-                                    npiz = Integer.parseInt(pizzanum2.getText().toString());
+                                    npiz = Integer.parseInt(pizzanum.getText().toString());
                                 }
-                                else if ( !pastanum2.getText().toString().equals("") && pizzanum2.getText().toString().equals(""))
+                                else if ( !pastanum.getText().toString().equals("") && pizzanum.getText().toString().equals(""))
                                 {
-                                    npas = Integer.parseInt(pastanum2.getText().toString());
+                                    npas = Integer.parseInt(pastanum.getText().toString());
                                     npiz = 0;
                                 }
-                                else if (pastanum2.getText().toString().equals("") && pizzanum2.getText().toString().equals(""))
+                                else if (pastanum.getText().toString().equals("") && pizzanum.getText().toString().equals(""))
                                 {
                                     npas = 0;
                                     npiz = 0;
@@ -220,57 +214,65 @@ public class Fragment1 extends Fragment implements View.OnClickListener
                             }
                                 else
                                 {
-                                    npas = Integer.parseInt(pastanum2.getText().toString());
-                                    npiz = Integer.parseInt(pizzanum2.getText().toString());
+                                    npas = Integer.parseInt(pastanum.getText().toString());
+                                    npiz = Integer.parseInt(pizzanum.getText().toString());
                                 }
                                 if(tvtable.getText().toString().equals("사과테이블"))
                                 {
-                                    if(rb3.isChecked())
+                                    if(rb1.isChecked())
                                     {
-                                        t1 = new Table ("사과테이블",npas,npiz,"기본 멤버쉽",finddate());
+                                        revisetable(t1);
+                                        t1.setMembership("기본 멤버쉽");
                                     }
-                                    else if (rb4.isChecked())
+                                    else if (rb2.isChecked())
                                     {
-                                        t1 = new Table ("사과테이블",npas,npiz,"VIP 멤버쉽",finddate());
+                                        revisetable(t1);
+                                        t1.setMembership("VIP 멤버쉽");
                                     }
                                     apple.setText("사과 TABLE");
                                     showtable2(t1);
                                 }
                                 else if(tvtable.getText().toString().equals("포도테이블"))
                                 {
-                                    if(rb3.isChecked())
+                                    if(rb1.isChecked())
                                     {
-                                        t2 = new Table ("포도테이블",npas,npiz,"기본 멤버쉽",finddate());
+                                        revisetable(t2);
+                                        t2.setMembership("기본 멤버쉽");
                                     }
-                                    else if (rb4.isChecked())
+                                    else if (rb2.isChecked())
                                     {
-                                        t2 = new Table ("포도테이블",npas,npiz,"VIP 멤버쉽",finddate());
+                                        revisetable(t2);
+                                        t2.setMembership("VIP 멤버쉽");
                                     }
                                     grape.setText("포도 TABLE");
                                     showtable2(t2);
                                 }
                                 else if(tvtable.getText().toString().equals("키위테이블"))
                                 {
-                                    if(rb3.isChecked())
+                                    if(rb1.isChecked())
                                     {
-                                        t3 = new Table ("키위테이블",npas,npiz,"기본 멤버쉽",finddate());
+                                        revisetable(t3);
+                                        t3.setMembership("기본 멤버쉽");
                                     }
-                                    else if (rb4.isChecked())
+                                    else if (rb2.isChecked())
                                     {
-                                        t3 = new Table ("키위테이블",npas,npiz,"VIP 멤버쉽",finddate());
+                                        revisetable(t3);
+                                        t1.setMembership("VIP 멤버쉽");
                                     }
                                     kiwi.setText("키위 TABLE");
                                     showtable2(t3);
                                 }
                                 else if(tvtable.getText().toString().equals("자몽테이블"))
                                 {
-                                    if(rb3.isChecked())
+                                    if(rb1.isChecked())
                                     {
-                                        t4 = new Table ("자몽테이블",npas,npiz,"기본 멤버쉽",finddate());
+                                        revisetable(t4);
+                                        t4.setMembership("기본 멤버쉽");
                                     }
-                                    else if (rb4.isChecked())
+                                    else if (rb2.isChecked())
                                     {
-                                        t4 = new Table ("자몽테이블",npas,npiz,"VIP 멤버쉽",finddate());
+                                        revisetable(t4);
+                                        t4.setMembership("VIP 멤버쉽");
                                     }
                                     jamong.setText("자몽 TABLE");
                                     showtable2(t4);
@@ -308,7 +310,6 @@ public class Fragment1 extends Fragment implements View.OnClickListener
                 break;
         }
     }
-
     public void thisisempty() //비어있는 Table일때 Toast
     {
         Toast.makeText(getActivity(), "비어있는 테이블입니다.", Toast.LENGTH_SHORT).show();
@@ -334,6 +335,11 @@ public class Fragment1 extends Fragment implements View.OnClickListener
         {
             tvprice.setText(price * 0.7 + "원");
         }
+    }
+    public void revisetable(Table t)
+    {
+        t.setPasta(npas);
+        t.setPizza(npiz);
     }
     public void cleaner()
     {
